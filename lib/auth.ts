@@ -1,6 +1,11 @@
 import bcrypt from "bcryptjs"
 import NextAuth from "next-auth"
-export const { handlers, auth, signIn, signOut } = NextAuth({ providers: [  ] })
+export const { handlers, auth, signIn, signOut } = NextAuth({
+     providers: [  ],
+     pages: {
+        signIn: "/auth/signin"
+     }
+    })
 
 export async function hashedPassword(password: string){
     const saltround = await bcrypt.genSalt(10);
