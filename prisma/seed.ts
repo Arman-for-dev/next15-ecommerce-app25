@@ -1,5 +1,6 @@
 
-import { PrismaClient, Product } from "../app/generated/prisma";
+import { hashedPassword } from "@/lib/auth";
+import { PrismaClient, Product, User } from "../app/generated/prisma";
 
 
 
@@ -74,6 +75,37 @@ async function main() {
         await prisma.product.create({
             data: product
         });
+    }
+
+    const users: User[] = [
+        {
+            id: "1",
+            email: "admin25@gmail.com",
+            name: "Admin25",
+            password: "Admin25",
+            role: "admin",
+            createdAt: new Date(),
+            updatedAt: new Date(),
+        },
+        {
+            id: "2",
+            email: "user25@gmail.com",
+            name: "User25",
+            password: "User25",
+            role: "user",
+            createdAt: new Date(),
+            updatedAt: new Date(),
+        },
+    ];
+    
+    for (const user of users) {
+        const userHashedPassword = await hashedPassword(user.password);
+        await prisma.user.create({
+            data: {
+                ...user,
+                password: userHashedPassword
+            }
+        })
     }
 }
 
